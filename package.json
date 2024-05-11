@@ -1,7 +1,7 @@
 {
   "name": "count-each-character-typing",
   "displayName": "count-each-character-typing",
-  "description": "",
+  "description": "count-each-character-typing",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.89.0"
@@ -9,13 +9,15 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "*"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "count-each-character-typing.helloWorld",
-        "title": "Hello World"
+        "command": "extension.calculateTypingEfficiency",
+        "title": "Calculate Typing Efficiency"
       }
     ]
   },

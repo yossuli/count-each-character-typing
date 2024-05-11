@@ -1,25 +1,53 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  let totalKeyPresses = context.workspaceState.get("totalKeyPresses", 0);
+  let totalCharacters = context.workspaceState.get("totalCharacters", 0);
+  console.log("Congratulations, your extension is now active!");
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "count-each-character-typing" is now active!');
+  let disposable = vscode.commands.registerCommand(
+    "extension.calculateTypingEfficiency",
+    function () {
+      vscode.window
+        .showInformationMessage(
+          "DO you want to reset your typing efficiency data ?",
+          {},
+          "yes"
+        )
+        .then((value) => {
+          if (value === "yes") {
+            totalKeyPresses = 0;
+            totalCharacters = 0;
+            console.log("reset data");
+            context.workspaceState.update("totalKeyPresses", totalKeyPresses);
+            context.workspaceState.update("totalCharacters", totalCharacters);
+          }
+        });
+    }
+  );
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('count-each-character-typing.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from count-each-character-typing!');
-	});
+  context.subscriptions.push(disposable);
 
-	context.subscriptions.push(disposable);
+  vscode.workspace.onDidChangeTextDocument(
+    (event) => {
+      if (event.contentChanges[0].text !== "") {
+        totalKeyPresses++;
+        totalCharacters += event.contentChanges[0].text.length;
+        context.workspaceState.update("totalKeyPresses", totalKeyPresses);
+        context.workspaceState.update("totalCharacters", totalCharacters);
+        console.log(
+          `[info] ${new Date().toLocaleTimeString()} totalKeyPresses: ${totalKeyPresses}, totalCharacters: ${totalCharacters}`
+        );
+      }
+      vscode.window.setStatusBarMessage(
+        `keyPresses: ${totalKeyPresses} characters: ${totalCharacters} efficiency: ${
+          Math.round((totalCharacters / totalKeyPresses) * 100) / 100
+        }`
+      );
+    },
+    null,
+    context.subscriptions
+  );
 }
 
 // This method is called when your extension is deactivated
