@@ -6,7 +6,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log("Congratulations, your extension is now active!");
 
   let disposable = vscode.commands.registerCommand(
-    "extension.calculateTypingEfficiency",
+    "extension.count-each-character-typing.reset",
     function () {
       vscode.window
         .showInformationMessage(
