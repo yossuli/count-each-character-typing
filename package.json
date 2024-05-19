@@ -17,7 +17,7 @@
     "commands": [
       {
         "command": "extension.count-each-character-typing.reset",
-        "title": "Calculate Typing Efficiency"
+        "title": "reset count each character typing"
       }
     ]
   },

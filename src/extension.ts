@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
     function () {
       vscode.window
         .showInformationMessage(
-          "DO you want to reset your typing efficiency data ?",
+          "Do you want to reset your typing efficiency data?",
           {},
           "yes"
         )
